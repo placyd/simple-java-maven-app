@@ -21,5 +21,13 @@ pipeline {
                 }
             }
         }
+		stage('Deliver to develop') {
+		    when {
+                branch 'develop'
+            }
+            steps {
+                sh './jenkins/scripts/deliver.sh' 
+            }
+        }
     }
 }
