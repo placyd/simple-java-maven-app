@@ -1,7 +1,6 @@
 pipeline {
     agent none
     stages {
-       // agent any
         stage('Build') { 
             agent {
                 docker {
@@ -21,12 +20,8 @@ pipeline {
                 args '-v /root/.m2:/root/.m2' 
             }
         }
-        // environment {
-        //     scannerHome = tool 'SonarQubeScanner'
-        // }
         steps {
             withSonarQubeEnv('sonarqube') {
-           //     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
                 sh "sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
             }
             timeout(time: 10, unit: 'MINUTES') {
@@ -35,23 +30,23 @@ pipeline {
         }
     }
 
-		// stage('Test') {
-        //     steps {
-        //         sh 'mvn test'
-        //     }
-        //     post {
-        //         always {
-        //             junit 'target/surefire-reports/*.xml'
-        //         }
-        //     }
-        // }
-		// stage('Deliver to develop') {
-		//     when {
-        //         branch 'develop'
-        //     }
-        //     steps {
-        //         sh './jenkins/scripts/deliver.sh' 
-        //     }
-        // }
+		stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+		stage('Deliver to develop') {
+		    when {
+                branch 'develop'
+            }
+            steps {
+                sh './jenkins/scripts/deliver.sh' 
+            }
+        }
     }
 }
