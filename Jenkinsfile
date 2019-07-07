@@ -7,7 +7,7 @@ pipeline {
     //     }
     // }
     stages {
-        agent any
+       // agent any
         stage('Build') { 
             steps {
                 sh 'mvn -B -DskipTests clean package' 
@@ -15,7 +15,7 @@ pipeline {
         }
 
     stage('Sonarqube') {
-        agent any
+      //  agent any
         environment {
             scannerHome = tool 'SonarQubeScanner'
         }
