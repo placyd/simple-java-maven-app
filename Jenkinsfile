@@ -21,9 +21,9 @@ pipeline {
                 args '-v /root/.m2:/root/.m2' 
             }
         }
-        environment {
-            scannerHome = tool 'SonarQubeScanner'
-        }
+        // environment {
+        //     scannerHome = tool 'SonarQubeScanner'
+        // }
         steps {
             withSonarQubeEnv('sonarqube') {
            //     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
