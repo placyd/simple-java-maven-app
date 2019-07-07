@@ -15,13 +15,19 @@ pipeline {
         }
 
     stage('Sonarqube') {
-        agent any
+        agent {
+            docker {
+                image 'sonar-scanner:1.0.0' 
+                args '-v /root/.m2:/root/.m2' 
+            }
+        }
         environment {
             scannerHome = tool 'SonarQubeScanner'
         }
         steps {
             withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
+           //     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
+                sh "sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=./src/main/java/ -Dsonar.java.binaries=./target/classes -Dsonar.language=java"
             }
             timeout(time: 10, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
